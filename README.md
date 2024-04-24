@@ -1,21 +1,50 @@
 ![Github Actions](../../actions/workflows/terraform.yml/badge.svg)
 
-# Terraform <NAME>
+# Terraform AWS DNS
 
 ## Description
 
-Add a description of the module here
+This module is designed to help provide centralised DNS resolution across multiple AWS accounts. It works by creating a Route53 Outbound Resolver
+in a central VPC. Any external Route53 Private Hosted Zones can then be attached to the same VPC and rules created to allow resolving DNS records
+for those zones via a single sharable resource with AWS Resource Access Manager.
 
 ## Usage
 
-Add example usage here
-
 ```hcl
-module "example" {
+module "central_dns" {
   source  = "appvia/dns/aws"
-  version = "1.0.0"
+  version = "1.0.0
 
-  # insert variables here
+  resolver_name   = "central"
+  resolver_vpc_id = "vpc-0f839083ca150be0f"
+
+  resolver_subnet_ids = [
+    "subnet-05268db2ad256445e",
+    "subnet-0e52076f0f87ba47d",
+  ]
+
+  resolver_rule_groups = {
+    main = {
+      ram_principals = [
+        "arn:aws:organizations::012345678910:organization/o-6doxpl2e1d",
+      ]
+
+      rules = [{
+        domain = "mycompany.internal"
+
+        targets = [
+          "10.0.0.2",
+        ]
+      }]
+    }
+  }
+
+  route53_zone_ids = [
+    "Z069099416OO53SIZNSAH",
+    "Z0104059RZRYA0EE84IM",
+    "Z082763213W4KUUPYB6YW",
+    "Z04370363H60F9DXTVYIU",
+  ]
 }
 ```
 
