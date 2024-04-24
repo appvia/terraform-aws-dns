@@ -12,8 +12,8 @@ Add example usage here
 
 ```hcl
 module "example" {
-  source  = "appvia/<NAME>/aws"
-  version = "0.0.1"
+  source  = "appvia/dns/aws"
+  version = "1.0.0"
 
   # insert variables here
 }
