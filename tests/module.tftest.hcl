@@ -10,7 +10,7 @@ mock_provider "aws" {
   }
 }
 
-run "basic_resolver" {
+run "basic" {
   command = plan
 
   variables {
