@@ -25,8 +25,8 @@ module "dns_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.2"
 
-  name = local.security_group_name
-  #description         = ""
+  name                = local.security_group_name
+  description         = "Used by the Route53 Resolver to allow DNS traffic to the internal dns solution"
   ingress_cidr_blocks = ["10.0.0.0/8"]
   ingress_rules       = ["dns-tcp", "dns-udp"]
   egress_rules        = ["dns-tcp", "dns-udp"]
