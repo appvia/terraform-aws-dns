@@ -23,7 +23,7 @@ module "vpc" {
 # tfsec:ignore:aws-ec2-no-public-egress-sgr
 module "dns_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
-  version = "5.1.2"
+  version = "5.2.0"
 
   name                = local.security_group_name
   description         = "Used by the Route53 Resolver to allow DNS traffic to the internal dns solution"
