@@ -8,27 +8,9 @@ In order to reuse and existing VPC, the module requires to following inputs
 - `var.network.subnet_ids` - The list subnet ids for the private subnets.
 
 <!-- BEGIN_TF_DOCS -->
-## Requirements
-
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
-
 ## Providers
 
 No providers.
-
-## Modules
-
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_dns"></a> [dns](#module\_dns) | ../../ | n/a |
-| <a name="module_network"></a> [network](#module\_network) | appvia/network/aws | 0.3.0 |
-
-## Resources
-
-No resources.
 
 ## Inputs
 
