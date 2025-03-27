@@ -1,15 +1,13 @@
 
-## Provision the network is required 
+## Provision the network is required
 module "vpc" {
   count   = local.enable_vpc_creation ? 1 : 0
   source  = "appvia/network/aws"
-  version = "0.3.4"
+  version = "0.4.0"
 
   availability_zones                     = var.network.availability_zones
   enable_default_route_table_association = var.network.enable_default_route_table_association
   enable_default_route_table_propagation = var.network.enable_default_route_table_propagation
-  enable_ipam                            = local.enable_ipam
-  enable_transit_gateway                 = true
   ipam_pool_id                           = var.network.ipam_pool_id
   name                                   = var.network.name
   private_subnet_netmask                 = var.network.private_netmask
@@ -19,7 +17,7 @@ module "vpc" {
   vpc_netmask                            = var.network.vpc_netmask
 }
 
-## If we are provisioning the resolvers we need to create a security group to allow the dns traffic 
+## If we are provisioning the resolvers we need to create a security group to allow the dns traffic
 # tfsec:ignore:aws-ec2-no-public-egress-sgr
 module "dns_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
@@ -34,7 +32,7 @@ module "dns_security_group" {
   vpc_id              = local.vpc_id
 }
 
-## Provision the Route53 resolver endpoint within the VPC 
+## Provision the Route53 resolver endpoint within the VPC
 resource "aws_route53_resolver_endpoint" "this" {
   name                   = var.resolver_name
   direction              = "OUTBOUND"
@@ -63,7 +61,7 @@ resource "aws_route53_resolver_rule" "this" {
   tags                 = merge(var.tags, { Name = each.value.rule_name })
 
   dynamic "target_ip" {
-    ## If we have a list of targets use them, otherwise use the default vpc resolver 
+    ## If we have a list of targets use them, otherwise use the default vpc resolver
     for_each = length(each.value.targets) > 0 ? each.value.targets : [local.vpc_dns_resolver]
 
     content {
@@ -72,7 +70,7 @@ resource "aws_route53_resolver_rule" "this" {
   }
 }
 
-## Associate the Route53 resolver endpoint with the VPC 
+## Associate the Route53 resolver endpoint with the VPC
 resource "aws_route53_zone_association" "this" {
   for_each = toset(var.route53_zone_ids)
 

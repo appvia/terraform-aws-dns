@@ -4,15 +4,13 @@
 # to build your own root module that invokes this module
 #####################################################################################
 
-## Create a network for the endpoints to reuse 
+## Create a network for the endpoints to reuse
 module "network" {
   source  = "appvia/network/aws"
-  version = "0.3.0"
+  version = "0.4.0"
 
   availability_zones                    = 2
-  enable_ipam                           = true
   enable_route53_resolver_rules         = true
-  enable_transit_gateway                = true
   enable_transit_gateway_appliance_mode = true
   ipam_pool_id                          = var.ipam_pool_id
   name                                  = "central-dns"
