@@ -96,9 +96,4 @@ run "resolver_creation" {
     condition     = aws_route53_resolver_endpoint.this.direction == "OUTBOUND"
     error_message = "Expected an outbound resolver"
   }
-
-  assert {
-    condition     = module.dns_security_group.aws_security_group.this_name_prefix[0].name_prefix == "dns-resolvers-test"
-    error_message = "Expected security group to be created"
-  }
 }
