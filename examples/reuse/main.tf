@@ -7,7 +7,7 @@
 ## Create a network for the endpoints to reuse
 module "network" {
   source  = "appvia/network/aws"
-  version = "0.4.0"
+  version = "0.6.10"
 
   availability_zones                    = 2
   enable_route53_resolver_rules         = true
