@@ -23,13 +23,46 @@ module "dns_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "6.0.0"
 
-  name                = local.security_group_name
-  description         = "Used by the Route53 Resolver to allow DNS traffic to the internal dns solution"
-  ingress_cidr_blocks = ["10.0.0.0/8"]
-  ingress_rules       = ["dns-tcp", "dns-udp"]
-  egress_rules        = ["dns-tcp", "dns-udp"]
-  tags                = merge(var.tags, { "Name" : local.security_group_name })
-  vpc_id              = local.vpc_id
+  name        = local.security_group_name
+  description = "Used by the Route53 Resolver to allow DNS traffic to the internal dns solution"
+
+  ingress_rules = {
+    dns-tcp = {
+      from_port   = 53
+      to_port     = 53
+      ip_protocol = "tcp"
+      cidr_ipv4   = "10.0.0.0/8"
+    }
+
+    dns-udp = {
+      from_port   = 53
+      to_port     = 53
+      ip_protocol = "udp"
+      cidr_ipv4   = "10.0.0.0/8"
+    }
+  }
+
+  egress_rules = {
+    dns-tcp = {
+      from_port   = 53
+      to_port     = 53
+      ip_protocol = "tcp"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+
+    dns-udp = {
+      from_port   = 53
+      to_port     = 53
+      ip_protocol = "udp"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+  }
+
+  tags = merge(var.tags, {
+    Name = local.security_group_name
+  })
+
+  vpc_id = local.vpc_id
 }
 
 ## Provision the Route53 resolver endpoint within the VPC
@@ -38,7 +71,7 @@ resource "aws_route53_resolver_endpoint" "this" {
   direction              = "OUTBOUND"
   protocols              = var.resolver_protocols
   resolver_endpoint_type = var.resolver_endpoint_type
-  security_group_ids     = [module.dns_security_group.security_group_id]
+  security_group_ids     = [module.dns_security_group.id]
   tags                   = merge(var.tags, { Name = var.resolver_name })
 
   dynamic "ip_address" {
