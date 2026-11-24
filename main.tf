@@ -71,7 +71,7 @@ resource "aws_route53_resolver_endpoint" "this" {
   direction              = "OUTBOUND"
   protocols              = var.resolver_protocols
   resolver_endpoint_type = var.resolver_endpoint_type
-  security_group_ids     = [module.dns_security_group.security_group_id]
+  security_group_ids     = [module.dns_security_group.id]
   tags                   = merge(var.tags, { Name = var.resolver_name })
 
   dynamic "ip_address" {
